@@ -139,7 +139,7 @@ class UserController extends Controller
             $inputEmail = $request->validate(['new_email' => ['unique:users,email','email']]);
             try {
                 User::where('id',$user_id)
-                    ->update(['email' => $inputEmail['email']]);
+                    ->update(['email' => $inputEmail['new_email']]);
             }catch (QueryException $exception){
                 return response()->json([
                     'message' => 'Invalid Request!',
