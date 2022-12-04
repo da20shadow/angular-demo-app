@@ -18,9 +18,20 @@ return new class extends Migration
             $table->string('title')->nullable(false);
             $table->string('description')->nullable(true);
             $table->boolean('completed')->default(false);
-            $table->timestamp('start_date')->nullable(true);
+            $table->timestamp('start_date')->nullable(false);
             $table->timestamp('due_date')->nullable(true);
             $table->foreignIdFor(\App\Models\User::class);
+            $table->enum('category',[
+                'Health',
+                'Career',
+                'Personal',
+                'Spiritual',
+                'Financial',
+                'Educational',
+                'Relationship',
+                'Other'
+                ]);
+            $table->timestamps();
         });
     }
 
