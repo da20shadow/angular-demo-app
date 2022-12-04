@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class GoalController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -26,12 +27,12 @@ class GoalController extends Controller
                 ->where(['completed' => false])
                 ->get();
         }catch (QueryException $exception){
-            return response()->json(['message' => 'An Error Occur! Please, try again!']);
+            return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
             //TODO: log the error!
         }
 
         if (count($goalsList) < 1){
-            return response()->json(['message' => 'No Goals Yet!']);
+            return response()->json(['message' => 'No Goals Yet!'],400);
         }
         return response()->json($goalsList);
     }
@@ -60,7 +61,7 @@ class GoalController extends Controller
             return response()->json([
                 'message' => 'An Error Occur! Please, try again!',
                 'error' => $exception->getMessage()
-            ],401);
+            ],400);
 
             //TODO: log the error!
         }
@@ -76,7 +77,7 @@ class GoalController extends Controller
             return response()->json([
                 'message' => 'An Error Occur! Please, try again!',
                 'error' => $exception->getMessage()
-            ],401);
+            ],400);
             //TODO: log the error!
         }
 
@@ -96,17 +97,9 @@ class GoalController extends Controller
     {
         $user_id = auth()->user()->getAuthIdentifier();
 
-        try {
-            $goal = Goal::where('user_id',$user_id)
-                ->where('id',$id)
-                ->first();
-        }catch (QueryException $exception){
-            return response()->json(['message' => 'An Error Occur! Please, try again!']);
-            //TODO: log the error!
-        }
-
-        if (!$goal){
-            return response()->json(['message' => 'No goal with ID']);
+        $result = self::chekIfExist($user_id, $id);
+        if ($result['error'] === true){
+            return response()->json(['message' => $result['message']], 400);
         }
 
         try {
@@ -115,7 +108,7 @@ class GoalController extends Controller
                 ->where(['user_id' => $user_id])
                 ->get();
         }catch (QueryException $exception){
-            return response()->json(['message' => 'An Error Occur! Please, try again!']);
+            return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
             //TODO: log the error!
         }
 
@@ -134,18 +127,9 @@ class GoalController extends Controller
     {
         $user_id = auth()->user()->getAuthIdentifier();
 
-        try {
-            $goalExist = DB::table('goals')
-                ->where(['id' => $id, 'user_id' => $user_id])->first('id');
-        }catch (QueryException $exception){
-            return response()->json(['message' => 'An Error Occur! Please, try again!']);
-            //TODO: log the error!
-        }
-
-        if (null === $goalExist){
-            return response()->json([
-                'message' => 'Such goal not exist!',
-            ], 401);
+        $result = self::chekIfExist($user_id, $id);
+        if ($result['error'] === true){
+            return response()->json(['message' => $result['message']], 400);
         }
 
         $fields = $request->all();
@@ -159,7 +143,7 @@ class GoalController extends Controller
                     ->update(['title' => $inputTitle['title']]);
                 $message['message'] = 'Successfully updated goal title!';
             }catch (QueryException $exception){
-                return response()->json(['message' => 'An Error Occur! Please, try again!']);
+                return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
                 //TODO: log the error!
             }
         }
@@ -172,7 +156,7 @@ class GoalController extends Controller
                     ->update(['description' => $inputDesc['description']]);
                 array_push($message,'Successfully updated goal description!');
             }catch (QueryException $exception){
-                return response()->json(['message' => 'An Error Occur! Please, try again!']);
+                return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
                 //TODO: log the error!
             }
         }
@@ -184,7 +168,7 @@ class GoalController extends Controller
                     ->update(['category' => $inputCategory['category']]);
                 array_push($message,'Successfully updated goal category!');
             }catch (QueryException $exception){
-                return response()->json(['message' => 'An Error Occur! Please, try again!']);
+                return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
                 //TODO: log the error!
             }
         }
@@ -196,7 +180,7 @@ class GoalController extends Controller
                     ->update(['due_date' => $inputDueDate['due_date']]);
                 array_push($message,'Successfully updated goal Due Date!');
             }catch (QueryException $exception){
-                return response()->json(['message' => 'An Error Occur! Please, try again!']);
+                return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
                 //TODO: log the error!
             }
         }
@@ -209,7 +193,7 @@ class GoalController extends Controller
                     ->update(['completed' => $inputDesc['completed']]);
                 array_push($message,'Successfully updated completed goal!');
             }catch (QueryException $exception){
-                return response()->json(['message' => 'An Error Occur! Please, try again!']);
+                return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
                 //TODO: log the error!
             }
         }
@@ -226,18 +210,9 @@ class GoalController extends Controller
     {
         $user_id = auth()->user()->getAuthIdentifier();
 
-        try {
-            $goalExist = DB::table('goals')
-                ->where(['id' => $id, 'user_id' => $user_id])->first('id');
-        }catch (QueryException $exception){
-            return response()->json(['message' => 'An Error Occur! Please, try again!']);
-            //TODO: log the error!
-        }
-
-        if (null === $goalExist){
-            return response()->json([
-                'message' => 'Such goal not exist!',
-            ], 401);
+        $result = self::chekIfExist($user_id, $id);
+        if ($result['error'] === true){
+            return response()->json(['message' => $result['message']], 400);
         }
 
         try {
@@ -257,4 +232,25 @@ class GoalController extends Controller
         }
         return response()->json(['message' => 'Successfully deleted goal!']);
     }
+
+    private static function chekIfExist(mixed $user_id, int $goal_id): array
+    {
+        $result = ['error' => false, 'message' => ''];
+        try {
+            $goalExist = DB::table('goals')
+                ->where(['id' => $goal_id, 'user_id' => $user_id])->first('id');
+        }catch (QueryException $exception){
+            $result['error'] = true;
+            $result['message'] = 'An Error Occur! Please, try again!';
+            return $result;
+            //TODO: log the error!
+        }
+
+        if (null === $goalExist){
+            $result['error'] = true;
+            $result['error'] = 'Such goal not exist!';
+        }
+        return $result;
+    }
+
 }
