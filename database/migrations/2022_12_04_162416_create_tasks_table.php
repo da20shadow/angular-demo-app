@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('title')->nullable(false);
             $table->string('description')->nullable(true);
-            $table->enum('status',['TO DO','In Progress','In Revision','Completed'])->default('TO DO');
+            $table->enum('status',['To Do','In Progress','In Revision','Completed'])->default('TO DO');
             $table->enum('priority',['No priority','Normal','High','Urgent'])->default('No priority');
             $table->foreignIdFor(\App\Models\Goal::class)->nullable(true);
             $table->foreignIdFor(\App\Models\Task::class)->nullable(true);
