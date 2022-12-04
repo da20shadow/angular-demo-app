@@ -102,6 +102,8 @@ class GoalController extends Controller
             return response()->json(['message' => $result['message']], 400);
         }
 
+        $goal = (array)$result['goal'];
+
         try {
             $goalTasks = DB::table('tasks')
                 ->where(['goal_id' => $id])
@@ -238,7 +240,7 @@ class GoalController extends Controller
         $result = ['error' => false, 'message' => ''];
         try {
             $goalExist = DB::table('goals')
-                ->where(['id' => $goal_id, 'user_id' => $user_id])->first('id');
+                ->where(['id' => $goal_id, 'user_id' => $user_id])->first();
         }catch (QueryException $exception){
             $result['error'] = true;
             $result['message'] = 'An Error Occur! Please, try again!';
@@ -248,8 +250,9 @@ class GoalController extends Controller
 
         if (null === $goalExist){
             $result['error'] = true;
-            $result['error'] = 'Such goal not exist!';
+            $result['message'] = 'Such goal not exist!';
         }
+        $result['goal'] = $goalExist;
         return $result;
     }
 
