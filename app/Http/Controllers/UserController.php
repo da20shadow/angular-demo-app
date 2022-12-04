@@ -113,7 +113,7 @@ class UserController extends Controller
         }
 
         return response()->json([
-            'username' => $publicProfile['username']
+            'user' => $publicProfile
         ]);
     }
 
