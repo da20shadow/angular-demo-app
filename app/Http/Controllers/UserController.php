@@ -112,6 +112,12 @@ class UserController extends Controller
             ],401);
         }
 
+        if ($publicProfile === null){
+            return response()->json([
+                'message' => 'Such user not exist!'
+            ]);
+        }
+
         return response()->json([
             'user' => $publicProfile
         ]);
