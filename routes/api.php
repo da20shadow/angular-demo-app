@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GoalController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,5 +26,9 @@ Route::group(['middleware' => ['auth:sanctum']],function () {
     Route::delete('goals/delete/{id}', [GoalController::class, 'destroy']);
 
     /** -----TASKS routes----- */
-    //TODO: add tasks routes
+    Route::get('tasks',[TaskController::class,'index']);
+    Route::get('tasks/{id}',[TaskController::class,'show']);
+    Route::post('tasks/add',[TaskController::class,'store']);
+    Route::patch('tasks/update/{id}',[TaskController::class,'update']);
+    Route::delete('tasks/delete/{id}',[TaskController::class,'destroy']);
 });
