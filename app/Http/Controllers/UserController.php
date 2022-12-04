@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -18,7 +19,16 @@ class UserController extends Controller
     public function index(): JsonResponse
     {
         $user_id = auth()->user()->getAuthIdentifier();
-        $profile = User::where('id',$user_id)->first();
+
+        try {
+            $profile = User::where('id',$user_id)->first();
+        }catch (QueryException $exception) {
+            return response()->json([
+                'message' => 'Invalid Request',
+                'error' => $exception->getMessage(),
+            ]);
+        }
+
         return response()->json([
             'username' => $profile['username'],
             'email' => $profile['email'],
@@ -39,11 +49,18 @@ class UserController extends Controller
             'password' => ['required','min:8','max:75','string','confirmed'],
         ]);
 
-        $user = User::create([
-            'username' => $fields['username'],
-            'email' => $fields['email'],
-            'password' => bcrypt($fields['password']),
-        ]);
+        try {
+            $user = User::create([
+                'username' => $fields['username'],
+                'email' => $fields['email'],
+                'password' => bcrypt($fields['password']),
+            ]);
+        }catch (QueryException $exception){
+            return response()->json([
+                'message' => 'Invalid request!',
+                'error' => $exception->getMessage()
+            ],401);
+        }
 
         $token = $user->createToken('laravelGoalsAppAccessToken')->plainTextToken;
 
@@ -84,7 +101,17 @@ class UserController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        $publicProfile = User::where('id',$id)->first();
+        try {
+            $publicProfile = DB::table('users')
+                ->select('username')
+                ->where(['id' => $id])->get()->first();
+        }catch (QueryException $exception){
+            return response()->json([
+                'message' => 'User not exist!',
+                'error' => $exception->getMessage()
+            ],401);
+        }
+
         return response()->json([
             'username' => $publicProfile['username']
         ]);
@@ -104,15 +131,31 @@ class UserController extends Controller
 
         if (isset($fields['new_email'])){
             $inputEmail = $request->validate(['new_email' => ['unique:users,email','email']]);
-            User::where('id',$user_id)
-                ->update(['email' => $inputEmail['email']]);
+            try {
+                User::where('id',$user_id)
+                    ->update(['email' => $inputEmail['email']]);
+            }catch (QueryException $exception){
+                return response()->json([
+                    'message' => 'Invalid Request!',
+                    'error' => $exception->getMessage()
+                ],401);
+            }
             return response()->json(['message' => 'Successfully updated email!']);
         }
 
         if (isset($fields['new_password'])){
             $inputPassword = $request->validate(['new_password' => ['min:8','max:75','string','confirmed']]);
-            User::where('id',$user_id)
-                ->update(['password' => bcrypt($inputPassword['new_password'])]);
+
+            try {
+                User::where('id',$user_id)
+                    ->update(['password' => bcrypt($inputPassword['new_password'])]);
+            }catch (QueryException $exception){
+                return response()->json([
+                    'message' => 'Invalid Request!',
+                    'error' => $exception->getMessage()
+                ],401);
+            }
+
             return response()->json(['message' => 'Successfully updated password!']);
         }
 
@@ -127,8 +170,16 @@ class UserController extends Controller
     public function destroy(): JsonResponse
     {
         $user_id = auth()->user()->getAuthIdentifier();
-        User::where('id',$user_id)
-            ->delete();
+
+        try {
+            User::where('id',$user_id)
+                ->delete();
+        }catch (QueryException $exception){
+            return response()->json([
+                'message' => 'Invalid Request!',
+                'error' => $exception->getMessage()
+            ],401);
+        }
 
         return response()->json(['message' => 'Successfully Deleted Account!']);
     }
