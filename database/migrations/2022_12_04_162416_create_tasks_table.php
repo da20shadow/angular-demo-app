@@ -24,6 +24,7 @@ return new class extends Migration
             $table->foreignIdFor(\App\Models\User::class)->nullable(false);
             $table->timestamp('start_date')->nullable(true);
             $table->timestamp('end_date')->nullable(true);
+            $table->timestamps();
         });
     }
 
