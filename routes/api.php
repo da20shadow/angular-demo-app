@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 /** --------------Public routes-------------- */
 Route::post('register',[UserController::class,'register']);
 Route::post('login',[UserController::class,'login']);
-Route::post('user/{id}',[UserController::class,'show']);
+Route::get('user/{id}',[UserController::class,'show']);
 
 /** --------------Protected routes-------------- */
 
