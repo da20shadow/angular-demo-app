@@ -1,4 +1,4 @@
-export const publicNavLinks = [
+const publicNavLinks = [
   {url: '/', name: 'Home'},
   {url: 'faq', name: 'FAQ'},
   {url: 'contact-us', name: 'Contact us'},
@@ -6,7 +6,7 @@ export const publicNavLinks = [
   {url: 'register', name: 'Register'},
 ];
 
-export const privateNavLinks = [
+const privateNavLinks = [
   {url: 'dashboard', name: 'Dashboard'},
   {url: 'profile', name: 'Profile'},
   {url: 'goals', name: 'Goals'},
@@ -14,6 +14,14 @@ export const privateNavLinks = [
   {url: 'logout', name: 'Logout'},
 ];
 
-export const footerNavLinks = [
-  //TODO:
+const footerNavLinks = [
+  {url: 'privacy', name: 'Privacy'},
+  {url: 'terms', name: 'Terms'},
+  //TODO: add more
 ];
+
+export const navBar = {
+  publicNavLinks,
+  privateNavLinks,
+  footerNavLinks,
+}
