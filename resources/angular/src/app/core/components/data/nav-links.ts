@@ -7,8 +7,8 @@ const publicNavLinks = [
 ];
 
 const privateNavLinks = [
-  {url: 'dashboard', name: 'Dashboard'},
-  {url: 'profile', name: 'Profile'},
+  {url: '/user/dashboard', name: 'Dashboard'},
+  {url: '/user/profile', name: 'Profile'},
   {url: 'goals', name: 'Goals'},
   {url: 'agenda', name: 'Agenda'},
   {url: 'logout', name: 'Logout'},
