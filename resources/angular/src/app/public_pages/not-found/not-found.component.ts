@@ -9,7 +9,7 @@ import {Title} from "@angular/platform-browser";
 export class NotFoundComponent {
 
   constructor(private titleService: Title) {
-    this.titleService.setTitle('Not Found - GoalsApp')
+    this.titleService.setTitle('404 Not Found - GoalsApp')
   }
 
 }
