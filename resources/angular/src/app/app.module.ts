@@ -7,6 +7,7 @@ import {SharedModule} from "./shared/shared.module";
 import {CoreModule} from "./core/core.module";
 import {PublicPagesModule} from "./public_pages/public-pages.module";
 import {AuthModule} from "./auth/auth.module";
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import {AuthModule} from "./auth/auth.module";
     PublicPagesModule,
     AuthModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    StoreModule.forRoot({}, {})
   ],
   providers: [],
   bootstrap: [AppComponent]
