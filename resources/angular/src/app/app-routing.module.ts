@@ -6,6 +6,7 @@ import {NotFoundComponent} from "./public_pages/not-found/not-found.component";
 import {NoAccessComponent} from "./public_pages/no-access/no-access.component";
 import {LoginComponent} from "./auth/login/login.component";
 import {RegisterComponent} from "./auth/register/register.component";
+import {isLoggedInGuardFn} from "./shared/guards/isLoggedInGuardFn";
 
 const routes: Routes = [
   {path: '', component: HomeComponent, pathMatch: 'full'},
@@ -13,6 +14,13 @@ const routes: Routes = [
   {path: 'register', component: RegisterComponent},
   {path: 'faq', component: FaqComponent},
   {path: 'no-access', component: NoAccessComponent},
+  {
+    path: 'user',
+    loadChildren: () =>
+      import('./user/user.module').then(m => m.UserModule),
+    canActivate: [isLoggedInGuardFn],
+    canLoad: [isLoggedInGuardFn]
+  },
   {path: '**', component: NotFoundComponent},
 ];
 
