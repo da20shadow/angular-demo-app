@@ -21,6 +21,13 @@ const routes: Routes = [
     canActivate: [isLoggedInGuardFn],
     canLoad: [isLoggedInGuardFn]
   },
+  {
+    path: 'goals',
+    loadChildren: () =>
+      import('./goals/goals.module').then(m => m.GoalsModule),
+    canActivate: [isLoggedInGuardFn],
+    canLoad: [isLoggedInGuardFn],
+  },
   {path: '**', component: NotFoundComponent},
 ];
 
