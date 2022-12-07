@@ -8,6 +8,7 @@ import {CoreModule} from "./core/core.module";
 import {PublicPagesModule} from "./public_pages/public-pages.module";
 import {AuthModule} from "./auth/auth.module";
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { StoreModule } from '@ngrx/store';
     AuthModule,
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot({}, {})
+    StoreModule.forRoot({}, {}),
+    EffectsModule.forRoot([])
   ],
   providers: [],
   bootstrap: [AppComponent]
