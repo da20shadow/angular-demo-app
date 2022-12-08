@@ -49,6 +49,7 @@ class TaskController extends Controller
             'title' => ['required','string'],
             'description' => ['string'],
             'end_date' => ['date'],
+            'status' => ['string'],
             'priority' => ['string'],
             'goal_id' => ['Integer'],
             'task_id' => ['Integer'],
@@ -63,7 +64,10 @@ class TaskController extends Controller
                 $goalExist = Goal::where('user_id',$user_id)
                     ->where('id',$fields['goal_id'])->first();
             }catch (QueryException $exception){
-                return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
+                return response()->json([
+                    'message' => 'An Error Occur! Please, try again!',
+                    'error' => $exception->getMessage()
+                ],400);
                 //TODO: log the error!
             }
 
@@ -78,8 +82,10 @@ class TaskController extends Controller
                 $taskExist = Task::where('user_id',$user_id)
                     ->where('id',$fields['task_id'])->first();
             }catch (QueryException $exception){
-                return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
-                //TODO: log the error!
+                return response()->json([
+                    'message' => 'An Error Occur! Please, try again!',
+                    'error' => $exception->getMessage()
+                ],400);
             }
             if (!$taskExist){
                 return response()->json(['message' => 'There is no parent task with this ID!'],400);
@@ -91,8 +97,10 @@ class TaskController extends Controller
             $taskTitleExist = Task::where('user_id',$user_id)
                 ->where('title',$fields['title'])->first();
         }catch (QueryException $exception){
-            return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
-            //TODO: log the error!
+            return response()->json([
+                'message' => 'An Error Occur! Please, try again!',
+                'error' => $exception->getMessage()
+            ],400);
         }
 
         if ($taskTitleExist !== null) {
@@ -104,8 +112,10 @@ class TaskController extends Controller
         try {
             Task::create($fields);
         }catch (QueryException $exception){
-            return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
-            //TODO: log the error!
+            return response()->json([
+                'message' => 'An Error Occur! Please, try again!',
+                'error' => $exception->getMessage()
+            ],400);
         }
 
         return response()->json([
