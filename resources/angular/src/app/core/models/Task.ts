@@ -1,9 +1,12 @@
+import {Status} from "../../shared/constants/Status";
+import {Priority} from "../../shared/constants/Priority";
+
 export interface Task {
   id: number|undefined,
   title: string,
   description: string|undefined,
-  status: "TO DO",
-  priority: "High",
+  status: Status|undefined,
+  priority: Priority|undefined,
   goal_id: number|undefined,
   task_id: number|undefined,
   user_id: number|undefined,
