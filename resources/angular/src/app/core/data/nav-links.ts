@@ -1,5 +1,5 @@
 const publicNavLinks = [
-  {url: '/', name: 'Home'},
+  {url: 'home', name: 'Home'},
   {url: 'faq', name: 'FAQ'},
   {url: 'contact-us', name: 'Contact us'},
   {url: 'login', name: 'Login'},
