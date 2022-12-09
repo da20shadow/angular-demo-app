@@ -7,10 +7,13 @@ import {NoAccessComponent} from "./public_pages/no-access/no-access.component";
 import {LoginComponent} from "./auth/login/login.component";
 import {RegisterComponent} from "./auth/register/register.component";
 import {isLoggedInGuardFn} from "./shared/guards/isLoggedInGuardFn";
+import {LogoutComponent} from "./auth/logout/logout.component";
 
 const routes: Routes = [
-  {path: '', component: HomeComponent, pathMatch: 'full'},
+  {path: '', redirectTo: 'home', pathMatch: 'full'},
+  {path: 'home', component: HomeComponent, pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
+  {path: 'logout', component: LogoutComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'faq', component: FaqComponent},
   {path: 'no-access', component: NoAccessComponent},
