@@ -25,6 +25,7 @@ class TaskController extends Controller
                 ->select('*')
                 ->where(['user_id' => $user_id])
                 ->where('status','!=','Completed')
+                ->orderBy('end_date')
                 ->get();
         }catch (QueryException $exception){
             return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
