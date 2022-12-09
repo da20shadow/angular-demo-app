@@ -1,1 +1,190 @@
-<p>register works!</p>
+<app-header-title title="Register"></app-header-title>
+<main>
+  <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+
+    <div class="w-full mx-auto max-w-md space-y-8">
+
+      <!-- Login Form -->
+      <form (ngSubmit)="registerHandler()" [formGroup]="regForm"
+            class="bg-white dark:bg-gray-800 mt-8 space-y-6 shadow p-10 rounded-lg">
+
+        <!-- Username Input Container-->
+        <div>
+          <div class="flex align-center border border-slate-600 rounded"
+               [ngClass]="{ 'ok-input': (regForm.get('username')?.touched && !regForm.get('username')?.errors),
+               'error-input': (regForm.get('username')?.touched && regForm.get('username')?.errors) }">
+
+            <i class="fas fa-regular fa-user" [ngClass]="globalClasses.inputIcon"></i>
+
+            <input [ngClass]="globalClasses.input"
+                   type="text"
+                   autocomplete="off"
+                   placeholder="Username"
+                   pattern="^\w{5,45}$"
+                   formControlName="username"
+                   required
+            />
+          </div>
+          <!-- Error/OK messages -->
+          <ng-container *ngIf="regForm.get('username')?.touched">
+            <span *ngIf="regForm.get('username')?.errors?.['required']"
+                  class="text-sm text-red-600">
+              Please enter Username!
+            </span>
+            <span *ngIf="regForm.get('username')?.errors?.['pattern']"
+                  class="text-sm text-red-600">
+              Username must contains only letters digits and '_' between 5 - 45 characters!
+            </span>
+            <span class="text-sm text-green-600" *ngIf="!regForm.get('username')?.errors">Looks OK!</span>
+          </ng-container>
+
+        </div>
+
+        <!-- Email Input Container-->
+        <div>
+          <div class="flex align-center border border-slate-600 rounded"
+               [ngClass]="{ 'ok-input': (regForm.get('email')?.touched && !regForm.get('email')?.errors),
+               'error-input': (regForm.get('email')?.touched && regForm.get('email')?.errors) }">
+
+            <i class="fas fa-regular fa-envelope" [ngClass]="globalClasses.inputIcon"></i>
+
+            <input [ngClass]="globalClasses.input"
+                   type="text"
+                   autocomplete="off"
+                   placeholder="Email"
+                   pattern="^([a-z]+)\w{2,}[@][a-z_-]{3,45}[.][a-z]{2,5}$"
+                   formControlName="email"
+                   required
+            />
+          </div>
+          <!-- Error/OK messages -->
+          <ng-container *ngIf="regForm.get('email')?.touched">
+            <span *ngIf="regForm.get('email')?.errors?.['required']"
+                  class="text-sm text-red-600">
+              Please enter Email!
+            </span>
+            <span *ngIf="regForm.get('email')?.errors?.['pattern']"
+                  class="text-sm text-red-600">
+              Please, enter valid Email!
+            </span>
+            <span class="text-sm text-green-600" *ngIf="!regForm.get('email')?.errors">Looks OK!</span>
+          </ng-container>
+
+        </div>
+
+
+        <ng-container formGroupName="pass">
+
+          <!-- Password Input Container-->
+          <div>
+            <div class="flex align-center border border-slate-600 rounded"
+                 [ngClass]="{ 'ok-input': (regForm.get('pass')?.get('password')?.touched && !regForm.get('pass')?.get('password')?.errors),
+               'error-input': (regForm.get('pass')?.get('password')?.touched && regForm.get('pass')?.get('password')?.errors) }">
+
+              <i class="fas fa-regular fa-lock" [ngClass]="globalClasses.inputIcon"></i>
+
+              <input [ngClass]="globalClasses.input"
+                     type="password"
+                     autocomplete="off"
+                     placeholder="Password"
+                     formControlName="password"
+                     required
+              />
+            </div>
+            <!-- Error/OK messages -->
+            <ng-container *ngIf="regForm.get('pass')?.get('password')?.touched">
+            <span *ngIf="regForm.get('pass')?.get('password')?.errors?.['required']"
+                  class="text-sm text-red-600">
+              Please enter Password!
+            </span>
+              <span *ngIf="regForm.get('pass')?.get('password')?.errors?.['minLength']"
+                    class="text-sm text-red-600">
+              Password must be at least 8 characters long!
+            </span>
+              <span class="text-sm text-green-600"
+                    *ngIf="!regForm.get('pass')?.get('password')?.errors">Looks OK!</span>
+            </ng-container>
+
+          </div>
+
+          <!-- Re-Password Input Container-->
+          <div>
+            <div class="flex align-center border border-slate-600 rounded"
+                 [ngClass]="{ 'ok-input': (regForm.get('pass')?.get('rePassword')?.touched
+                 && !regForm.get('pass')?.get('rePassword')?.errors && !regForm.get('pass')?.errors),
+               'error-input': (regForm.get('pass')?.get('rePassword')?.touched
+                && regForm.get('pass')?.get('rePassword')?.errors) ||
+                 (regForm.get('pass')?.get('rePassword')?.touched
+                  && regForm.get('pass')?.errors)}">
+
+              <i class="fas fa-regular fa-lock" [ngClass]="globalClasses.inputIcon"></i>
+
+              <input [ngClass]="globalClasses.input"
+                     type="password"
+                     autocomplete="off"
+                     placeholder="Re-password"
+                     formControlName="rePassword"
+                     required
+              />
+            </div>
+            <!-- Error/OK messages -->
+            <ng-container *ngIf="regForm.get('pass')?.get('password')?.touched">
+            <span *ngIf="regForm.get('pass')?.get('rePassword')?.errors?.['required']"
+                  class="text-sm text-red-600">
+              Please enter Password!
+            </span>
+              <span *ngIf="regForm.get('pass')?.get('rePassword')?.errors?.['minLength']"
+                    class="text-sm text-red-600">
+              Password must be at least 8 characters long!
+            </span>
+              <span *ngIf="regForm.get('pass')?.errors?.['sameValueValidator']"
+                    class="text-sm text-red-600 block">
+              Password and Re-password doesn't match!
+            </span>
+              <span class="text-sm text-green-600"
+                    *ngIf="(!regForm.get('pass')?.get('rePassword')?.errors
+                    && !regForm.get('pass')?.errors)">Looks OK!</span>
+            </ng-container>
+
+          </div>
+
+        </ng-container>
+
+
+        <!-- Register Button -->
+        <div>
+
+          <button [disabled]="regForm.invalid" type="submit"
+                  [class]="globalClasses.button"
+                  [ngClass]="{
+                    'btn-disabled' : (regForm.invalid && !isDarkMode ),
+                    'btn-disabled-dark' : (regForm.invalid && isDarkMode)}">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <i class="fas fa-regular fa-user-plus"></i>
+            </span>
+            Register
+          </button>
+
+        </div>
+
+
+        <!-- Login Link -->
+        <div class="flex items-center justify-center text-sm">
+
+          <!-- Login Now Link -->
+          <a routerLink="/register"
+             [ngClass]="globalClasses.link">Already Registered?</a>
+
+        </div>
+
+      </form>
+
+      {{regForm.value | json}}
+      <hr>
+      Valid: {{regForm.valid | json}}
+      Invalid: {{regForm.invalid | json}}
+
+    </div>
+
+  </div>
+</main>
