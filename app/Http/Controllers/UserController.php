@@ -79,18 +79,22 @@ class UserController extends Controller
         $user = User::where('email',$fields['email'])->first();
         //Check password
         if (!$user || !Hash::check($fields['password'],$user->password)) {
-            return response()->json(['message'=>'Bad credentials!'],401);
+            return response()->json(['message'=>'Bad credentials!'],400);
         }
 
         $token = $user->createToken('laravelGoalsAppAccessToken')->plainTextToken;
         $user['token'] = $token;
-        return response()->json($user,201);
+        return response()->json($user);
     }
 
     public function logout(): JsonResponse
     {
+        $userId = auth()->user()->getAuthIdentifier();
+        if (!$userId){
+            return response()->json(['message' => 'Bad Request!'],400);
+        }
         auth()->user()->tokens()->delete();
-        return response()->json(['user' => 'Successfully logged out']);
+        return response()->json(['message' => 'Successfully logged out']);
     }
 
     /**
