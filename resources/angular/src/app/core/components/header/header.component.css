@@ -1,3 +1,6 @@
-
+.active-nav-link {
+  background-color: rgb(17, 24, 39);
+  color: white;
+}
 
 /*# sourceMappingURL=header.component.css.map */
