@@ -6,10 +6,18 @@
 
       <!-- Login Form -->
       <form (ngSubmit)="registerHandler()" [formGroup]="regForm"
-            class="bg-white dark:bg-gray-800 mt-8 space-y-6 shadow p-10 rounded-lg">
+            class="bg-white dark:bg-gray-800 mt-8 space-y-5 shadow p-10 rounded-lg shadow-2xl">
+
+        <!-- Login Link -->
+        <div class="mt-3 text-sm">
+          <span>Already have an account? </span>
+          <a routerLink="/login"
+             [ngClass]="globalClasses.link">Login here.</a>
+        </div>
 
         <!-- Username Input Container-->
         <div>
+          <label class="text-sm">Username: <span class="text-rose-500">*</span></label>
           <div class="flex align-center border border-slate-600 rounded"
                [ngClass]="{ 'ok-input': (regForm.get('username')?.touched && !regForm.get('username')?.errors),
                'error-input': (regForm.get('username')?.touched && regForm.get('username')?.errors) }">
@@ -42,6 +50,7 @@
 
         <!-- Email Input Container-->
         <div>
+          <label class="text-sm">Email: <span class="text-rose-500">*</span></label>
           <div class="flex align-center border border-slate-600 rounded"
                [ngClass]="{ 'ok-input': (regForm.get('email')?.touched && !regForm.get('email')?.errors),
                'error-input': (regForm.get('email')?.touched && regForm.get('email')?.errors) }">
@@ -77,6 +86,7 @@
 
           <!-- Password Input Container-->
           <div>
+            <label class="tex-sm">Password: <span class="text-rose-500">*</span></label>
             <div class="flex align-center border border-slate-600 rounded"
                  [ngClass]="{ 'ok-input': (regForm.get('pass')?.get('password')?.touched && !regForm.get('pass')?.get('password')?.errors),
                'error-input': (regForm.get('pass')?.get('password')?.touched && regForm.get('pass')?.get('password')?.errors) }">
@@ -107,8 +117,9 @@
 
           </div>
 
-          <!-- Re-Password Input Container-->
+          <!-- Confirm password Input Container-->
           <div>
+            <label class="tex-sm">Confirm password: <span class="text-rose-500">*</span></label>
             <div class="flex align-center border border-slate-600 rounded"
                  [ngClass]="{ 'ok-input': (regForm.get('pass')?.get('rePassword')?.touched
                  && !regForm.get('pass')?.get('rePassword')?.errors && !regForm.get('pass')?.errors),
@@ -122,7 +133,7 @@
               <input [ngClass]="globalClasses.input"
                      type="password"
                      autocomplete="off"
-                     placeholder="Re-password"
+                     placeholder="Confirm password"
                      formControlName="rePassword"
                      required
               />
@@ -155,7 +166,7 @@
         <div>
 
           <button [disabled]="regForm.invalid" type="submit"
-                  [class]="globalClasses.button"
+                  [class]="globalClasses.btnFullWidth"
                   [ngClass]="{
                     'btn-disabled' : (regForm.invalid && !isDarkMode ),
                     'btn-disabled-dark' : (regForm.invalid && isDarkMode)}">
@@ -167,14 +178,12 @@
 
         </div>
 
-
-        <!-- Login Link -->
-        <div class="flex items-center justify-center text-sm">
-
-          <!-- Login Now Link -->
-          <a routerLink="/register"
-             [ngClass]="globalClasses.link">Already Registered?</a>
-
+        <hr>
+        <!-- Join with Social Media -->
+        <p class="text-center">Or sign up with your social network</p>
+        <div class="flex justify-between gap-4">
+          <button type="button" class="py-2 px-3 border hover:border-rose-600 w-full rounded">Google</button>
+          <button type="button" class="py-2 px-3 border hover:border-blue-600 w-full rounded">Facebook</button>
         </div>
 
       </form>
