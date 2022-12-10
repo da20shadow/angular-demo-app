@@ -1,5 +1,5 @@
 <div class="min-h-full">
-  <nav class="bg-gray-800 dark:border-b-2 border-blue-500">
+  <nav class="bg-gray-800 ">
     <div class="w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex h-16 items-center justify-between">
 
@@ -14,7 +14,7 @@
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
 
-              <a class="nav-link" [routerLink]="nav.url" *ngFor="let nav of navbar"
+              <a [ngClass]="classes.navLink" [routerLink]="nav.url" *ngFor="let nav of navbar"
                  routerLinkActive="active-nav-link"
               >
                 {{nav.name}}

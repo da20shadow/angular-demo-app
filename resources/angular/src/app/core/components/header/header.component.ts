@@ -3,6 +3,7 @@ import {navBar} from "../../data/nav-links";
 import {DarkLightModeService} from "../../services/dark-light-mode.service";
 import {AuthService} from "../../../auth/services/auth.service";
 import {Router} from "@angular/router";
+import {GlobalClasses} from "../../../shared/constants/Global-Classes";
 
 @Component({
   selector: 'app-header',
@@ -11,9 +12,11 @@ import {Router} from "@angular/router";
 })
 export class HeaderComponent {
 
+  classes = GlobalClasses;
   isLogged!: boolean;
   darkMode!: boolean;
   navbar: any = [];
+
 
   constructor(private darkModeService: DarkLightModeService,
               private route: Router,
