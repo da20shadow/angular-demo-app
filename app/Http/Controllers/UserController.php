@@ -30,6 +30,7 @@ class UserController extends Controller
         }
 
         return response()->json([
+            'id' => $user_id,
             'username' => $profile['username'],
             'email' => $profile['email'],
         ]);
