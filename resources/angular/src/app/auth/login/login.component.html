@@ -6,7 +6,14 @@
 
       <!-- Login Form -->
       <form (ngSubmit)="loginHandler(loginForm)" #loginForm="ngForm"
-            class="bg-white dark:bg-gray-800 mt-8 space-y-6 shadow p-10 rounded-lg">
+            class="bg-white dark:bg-gray-800 mt-8 space-y-6 shadow p-10 rounded-lg shadow-2xl">
+
+        <!-- Join Now Link -->
+        <div class="mt-3 text-sm">
+          <span>Don’t have an account yet? </span>
+          <a routerLink="/register"
+             [ngClass]="globalClasses.link">Register here.</a>
+        </div>
 
         <!-- Email Input Container-->
         <div>
@@ -73,13 +80,11 @@
 
         </div>
 
-
-
         <!-- Login Button -->
         <div>
 
           <button [disabled]="loginForm.invalid" type="submit"
-                  [class]="globalClasses.button"
+                  [class]="globalClasses.btnFullWidth"
                   [ngClass]="{
                     'btn-disabled' : (loginForm.invalid && !isDarkMode ),
                     'btn-disabled-dark' : (loginForm.invalid && isDarkMode)}" >
@@ -91,17 +96,20 @@
 
         </div>
 
-
         <!-- Forgot password Link -->
-        <div class="flex items-center justify-between text-sm">
-
-          <!-- Join Now Link -->
-          <a routerLink="/register"
-             [ngClass]="globalClasses.link">Not Registered?</a>
+        <div class="flex items-center justify-center text-sm">
 
           <a routerLink="/reset-password"
              [ngClass]="globalClasses.link">Forgot your password?</a>
 
+        </div>
+
+        <hr>
+        <!-- Login with Social Media -->
+        <p class="text-center">Or sign in with your social network</p>
+        <div class="flex justify-between gap-4">
+          <button type="button" class="py-2 px-3 border hover:border-rose-600 w-full rounded">Google</button>
+          <button type="button" class="py-2 px-3 border hover:border-blue-600 w-full rounded">Facebook</button>
         </div>
 
       </form>
