@@ -18,6 +18,7 @@ import {AuthEffect} from "./auth/Store/auth.effect";
 import {goalsReducer} from "./goals/Store/goals.reducers";
 import {GoalsEffects} from "./goals/Store/goals.effects";
 import {APP_BASE_HREF} from "@angular/common";
+import {extModules} from "./build-specifics";
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import {APP_BASE_HREF} from "@angular/common";
       AuthEffect,
       GoalsEffects
     ]),
+    extModules,
   ],
   providers: [
     {
