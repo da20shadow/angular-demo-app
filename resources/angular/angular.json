@@ -54,7 +54,7 @@
               ],
               "outputHashing": "all",
               "outputPath": "../../public/assets/angular",
-              "baseHref": "/assets/angular"
+              "baseHref": "/assets/angular/"
             },
             "development": {
               "buildOptimizer": false,
@@ -64,7 +64,7 @@
               "sourceMap": true,
               "namedChunks": true,
               "outputPath": "dist/assets/angular",
-              "baseHref": "/assets/angular"
+              "baseHref": "/assets/angular/"
             }
           },
           "defaultConfiguration": "production"

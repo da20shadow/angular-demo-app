@@ -13,6 +13,11 @@ import { EffectsModule } from '@ngrx/effects';
 import {AuthModule} from "./auth/auth.module";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {JWTInterceptorService} from "./auth/interceptors/jwt-interceptor";
+import {authReducer} from "./auth/Store/auth.reducer";
+import {AuthEffect} from "./auth/Store/auth.effect";
+import {goalsReducer} from "./goals/Store/goals.reducers";
+import {GoalsEffects} from "./goals/Store/goals.effects";
+import {APP_BASE_HREF} from "@angular/common";
 
 
 @NgModule({
@@ -27,15 +32,22 @@ import {JWTInterceptorService} from "./auth/interceptors/jwt-interceptor";
     PublicPagesModule,
     AuthModule,
     AppRoutingModule,
-    StoreModule.forRoot({}, {}),
-    EffectsModule.forRoot([])
+    StoreModule.forRoot({
+      user: authReducer,
+      goals: goalsReducer,
+    }, {}),
+    EffectsModule.forRoot([
+      AuthEffect,
+      GoalsEffects
+    ]),
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JWTInterceptorService,
       multi: true
-    }
+    },
+    {provide: APP_BASE_HREF, useValue: '/assets/angular/'}
   ],
   bootstrap: [AppComponent]
 })
