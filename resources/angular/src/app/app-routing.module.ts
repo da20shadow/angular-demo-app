@@ -8,6 +8,7 @@ import {LoginComponent} from "./auth/login/login.component";
 import {RegisterComponent} from "./auth/register/register.component";
 import {isLoggedInGuardFn} from "./shared/guards/isLoggedInGuardFn";
 import {LogoutComponent} from "./auth/logout/logout.component";
+import {ContactUsComponent} from "./public_pages/contact-us/contact-us.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -16,9 +17,10 @@ const routes: Routes = [
   {path: 'logout', component: LogoutComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'faq', component: FaqComponent},
+  {path: 'contact-us', component: ContactUsComponent},
   {path: 'no-access', component: NoAccessComponent},
   {
-    path: 'user',
+    path: 'profile',
     loadChildren: () =>
       import('./user/user.module').then(m => m.UserModule),
     canActivate: [isLoggedInGuardFn],
