@@ -14,14 +14,14 @@ export class ApiUrls {
 
   //Goals API urls
   static readonly GOALS = `${BASE_URL}/goals`;
-  static readonly GOALS_ADD = `${BASE_URL}/goals/add`;
-  static readonly GOALS_UPDATE = `${BASE_URL}/goals/update`;
-  static readonly GOALS_DELETE = `${BASE_URL}/goals/delete`;
+  static readonly GOAL_ADD = `${BASE_URL}/goals/add`;
+  static readonly GOAL_UPDATE = `${BASE_URL}/goals/update`;
+  static readonly GOAL_DELETE = `${BASE_URL}/goals/delete`;
 
   //Tasks API urls
   static readonly TASKS = `${BASE_URL}/tasks`;
-  static readonly TASKS_ADD = `${BASE_URL}/tasks/add`;
-  static readonly TASKS_UPDATE = `${BASE_URL}/tasks/update`;
-  static readonly TASKS_DELETE = `${BASE_URL}/tasks/delete`;
+  static readonly TASK_ADD = `${BASE_URL}/tasks/add`;
+  static readonly TASK_UPDATE = `${BASE_URL}/tasks/update`;
+  static readonly TASK_DELETE = `${BASE_URL}/tasks/delete`;
 
 }
