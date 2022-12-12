@@ -1,5 +1,5 @@
-import {Status} from "../../shared/constants/Status";
-import {Priority} from "../../shared/constants/Priority";
+import {Status} from "../../../shared/constants/Status";
+import {Priority} from "../../../shared/constants/Priority";
 
 export interface Task {
   id: number|undefined,

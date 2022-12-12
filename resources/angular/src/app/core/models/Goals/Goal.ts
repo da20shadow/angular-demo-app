@@ -1,4 +1,4 @@
-import {GoalCategories} from "../../shared/constants/GoalCategories";
+import {GoalCategories} from "../../../shared/constants/GoalCategories";
 
 export interface Goal {
   id: number|undefined|null;
