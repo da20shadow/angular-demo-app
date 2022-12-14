@@ -18,21 +18,9 @@ class UserController extends Controller
      */
     public function index(): JsonResponse
     {
-        $user_id = auth()->user()->getAuthIdentifier();
-
-        try {
-            $profile = User::where('id',$user_id)->first();
-        }catch (QueryException $exception) {
-            return response()->json([
-                'message' => 'Invalid Request',
-                'error' => $exception->getMessage(),
-            ]);
-        }
-
+        $user = auth()->user();
         return response()->json([
-            'id' => $user_id,
-            'username' => $profile['username'],
-            'email' => $profile['email'],
+            'user' => $user
         ]);
     }
 
@@ -67,7 +55,10 @@ class UserController extends Controller
 
         $user['token'] = $token;
 
-        return response()->json($user,201);
+        return response()->json([
+            'message' => 'Successfully Registered!',
+            'user' => $user
+        ],201);
     }
 
     public function login(Request $request): JsonResponse
@@ -85,7 +76,11 @@ class UserController extends Controller
 
         $token = $user->createToken('laravelGoalsAppAccessToken')->plainTextToken;
         $user['token'] = $token;
-        return response()->json($user);
+
+        return response()->json([
+            'message' => 'Successfully Logged in!',
+            'user' => $user
+        ],201);
     }
 
     public function logout(): JsonResponse
@@ -140,6 +135,7 @@ class UserController extends Controller
 
         $fields = $request->all();
 
+        $successMessage = 'Successfully updated';
         if (isset($fields['new_email'])){
             $inputEmail = $request->validate(['new_email' => ['unique:users,email','email']]);
             try {
@@ -151,7 +147,7 @@ class UserController extends Controller
                     'error' => $exception->getMessage()
                 ],401);
             }
-            return response()->json(['message' => 'Successfully updated email!']);
+            $successMessage = $successMessage. ' email';
         }
 
         if (isset($fields['new_password'])){
@@ -167,10 +163,17 @@ class UserController extends Controller
                 ],401);
             }
 
-            return response()->json(['message' => 'Successfully updated password!']);
+            $successMessage = $successMessage. ' password';
         }
 
-        return response()->json(['message' => 'An error occur! Please, try again!']);
+        if ($successMessage === 'Successfully updated'){$successMessage = 'Nothing Updated';}
+
+        $successMessage = $successMessage. '!';
+        $user = auth()->user();
+        return response()->json([
+            'message' => $successMessage,
+            'user' => $user
+        ]);
     }
 
     /**
