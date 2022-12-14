@@ -27,10 +27,9 @@ export class JWTInterceptorService implements HttpInterceptor {
 
     return next.handle(request).pipe(
       map((event: HttpEvent<any>) => {
-        if (event instanceof HttpResponse && event.body.token) {
-          console.log('JWTInterceptor event body: ',event.body);
-          console.log('JWTInterceptor: event ',event);
-          localStorage.setItem('token', event.body.token);
+
+        if (event instanceof HttpResponse && event.body.user && event.body.user.token) {
+          localStorage.setItem('token', event.body.user.token);
         }
         return event;
       }),
