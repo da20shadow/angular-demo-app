@@ -84,11 +84,10 @@
         <!-- Login Button -->
         <div>
 
-          <button [disabled]="loginForm.invalid" type="submit"
-                  [class]="globalClasses.btnFullWidth"
-                  [ngClass]="{
-                    'btn-disabled' : (loginForm.invalid && !isDarkMode ),
-                    'btn-disabled-dark' : (loginForm.invalid && isDarkMode)}" >
+          <button class="w-full relative" [disabled]="loginForm.invalid" type="submit"
+                  [class]="loginForm.invalid
+                    ? 'btn-primary-disabled dark:btn-primary-disabled-dark'
+                    : 'btn-primary dark:btn-primary-dark'">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
               <i class="fas fa-regular fa-lock"></i>
             </span>
