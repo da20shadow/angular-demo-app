@@ -34,6 +34,9 @@ class GoalController extends Controller
         if (count($goalsList) < 1){
             return response()->json(['message' => 'No Goals Yet!'],400);
         }
+        foreach ((array)$goalsList as $goal){
+            $goal['tasks'] = [];
+        }
         return response()->json($goalsList);
     }
 
@@ -118,7 +121,10 @@ class GoalController extends Controller
         }
 
         $goal['tasks'] = $goalTasks;
-        return response()->json($goal);
+        return response()->json([
+            'message' => 'Success!',
+            'goal' => $goal
+        ]);
     }
 
     /**
