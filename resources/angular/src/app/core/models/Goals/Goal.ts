@@ -1,4 +1,5 @@
 import {GoalCategories} from "../../../shared/constants/GoalCategories";
+import {Task} from "../Tasks/Task";
 
 export interface Goal {
   id: number|undefined|null;
@@ -11,5 +12,5 @@ export interface Goal {
   created_at: string|undefined|null;
   updated_at: string|undefined|null;
   category: GoalCategories|undefined|null;
-  tasks: string|undefined|null;
+  tasks: Task[];
 }
