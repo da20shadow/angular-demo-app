@@ -2,32 +2,28 @@ import {Component, OnInit} from '@angular/core';
 import {Title} from "@angular/platform-browser";
 import {NgForm} from "@angular/forms";
 import {GlobalClasses} from "../../shared/constants/Global-Classes";
-import {DarkLightModeService} from "../../core/services/dark-light-mode.service";
-import {AuthService} from "../services/auth.service";
-import {Router} from "@angular/router";
 import {Store} from "@ngrx/store";
+import {UserPageActions} from "../../Store/user-store/user-page.actions";
+import {DarkLightModeService} from "../../core/services/dark-light-mode.service";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
-
-  globalClasses = GlobalClasses;
+export class LoginComponent implements OnInit{
   isDarkMode: boolean = this.darkModeService.isDarkModeEnabled();
+  globalClasses = GlobalClasses;
 
   constructor(private titleService: Title,
-              private route: Router,
-              private store: Store,
-              private authService: AuthService,
-              private darkModeService: DarkLightModeService) {
+              private darkModeService: DarkLightModeService,
+              private store$: Store) {
     this.titleService.setTitle('Login - GoalsApp');
-    if (this.authService.isLoggedIn()){
-      this.route.navigate(['dashboard'])
-    }
   }
 
+  ngOnInit() {
+
+  }
 
   loginHandler(loginForm: NgForm) {
     //TODO: show notification instead alerts!
@@ -35,16 +31,7 @@ export class LoginComponent {
       alert("Invalid Credentials!");
       return;
     }
-
     const {email, password} = loginForm.value;
-    this.authService.login(email, password).subscribe({
-      next: user => {
-        alert('Successfully Logged in!')
-        this.route.navigate(['dashboard'])
-      },
-      error: (err) => {
-        alert(err.error.message)
-      }
-    });
+    this.store$.dispatch(UserPageActions.login({email, password}))
   }
 }
