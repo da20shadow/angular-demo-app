@@ -3,13 +3,13 @@ import {DarkLightModeService} from "../../../../services/dark-light-mode.service
 import {navBar} from "../../../../data/nav-links";
 
 @Component({
-  selector: 'app-private-navigation',
-  templateUrl: './private-navigation.component.html',
-  styleUrls: ['./private-navigation.component.scss']
+  selector: 'app-public-navigation',
+  templateUrl: './public-navigation.component.html',
+  styleUrls: ['./public-navigation.component.scss']
 })
-export class PrivateNavigationComponent {
+export class PublicNavigationComponent {
   darkMode!: boolean;
-  privateNavLinks = navBar.privateNavLinks;
+  publicNavLinks = navBar.publicNavLinks;
 
   constructor(private darkModeService: DarkLightModeService) {
     this.darkMode = this.darkModeService.checkUserPreferredMode();
