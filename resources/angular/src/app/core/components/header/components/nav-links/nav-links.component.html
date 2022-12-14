@@ -1,0 +1,9 @@
+<div class="hidden md:block">
+  <div class="ml-10 flex items-baseline space-x-4">
+    <a [ngClass]="classes.navLink" [routerLink]="nav.url"
+       *ngFor="let nav of navLinks"
+       routerLinkActive="active-nav-link" >
+      {{nav.name}}
+    </a>
+  </div>
+</div>
