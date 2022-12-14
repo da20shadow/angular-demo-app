@@ -13,12 +13,14 @@ import { EffectsModule } from '@ngrx/effects';
 import {AuthModule} from "./auth/auth.module";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {JWTInterceptorService} from "./auth/interceptors/jwt-interceptor";
-import {authReducer} from "./auth/Store/auth.reducer";
-import {AuthEffect} from "./auth/Store/auth.effect";
-import {goalsReducer} from "./goals/Store/goals.reducers";
-import {GoalsEffects} from "./goals/Store/goals.effects";
 import {APP_BASE_HREF} from "@angular/common";
 import {extModules} from "./build-specifics";
+import {SharedAppStateModule} from "./Store/app.state";
+import {GoalsApiEffects} from "./Store/goals-store/goals-api.effects";
+import {GoalService} from "./goals/services/goal.service";
+import {UserApiEffects} from "./Store/user-store/user-api.effects";
+import {routerReducer, StoreRouterConnectingModule} from "@ngrx/router-store";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -33,15 +35,17 @@ import {extModules} from "./build-specifics";
     PublicPagesModule,
     AuthModule,
     AppRoutingModule,
-    StoreModule.forRoot({
-      user: authReducer,
-      goals: goalsReducer,
-    }, {}),
+    SharedAppStateModule,
+    StoreModule.forRoot( {
+      router: routerReducer,
+    }),
     EffectsModule.forRoot([
-      AuthEffect,
-      GoalsEffects
+      GoalsApiEffects,
+      UserApiEffects,
     ]),
+    StoreRouterConnectingModule.forRoot(),
     extModules,
+    BrowserAnimationsModule,
   ],
   providers: [
     {
