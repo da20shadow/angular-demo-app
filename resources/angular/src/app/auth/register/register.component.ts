@@ -1,18 +1,20 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Title} from "@angular/platform-browser";
 import {GlobalClasses} from "../../shared/constants/Global-Classes";
-import {FormBuilder, NgForm, Validators} from "@angular/forms";
+import {FormBuilder, Validators} from "@angular/forms";
 import {AuthService} from "../services/auth.service";
 import {emailValidator} from "../../shared/validators/email.validator";
 import {sameValueValidator} from "../../shared/validators/same-value.validator";
 import {DarkLightModeService} from "../../core/services/dark-light-mode.service";
+import {Store} from "@ngrx/store";
+import {UserPageActions} from "../../Store/user-store/user-page.actions";
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit{
 
   globalClasses = GlobalClasses;
   isDarkMode: boolean = this.darkModeService.isDarkModeEnabled();
@@ -29,29 +31,23 @@ export class RegisterComponent {
   })
 
   constructor(private titleService: Title,
-              private fb: FormBuilder,
               private darkModeService: DarkLightModeService,
-              private auth: AuthService) {
-    this.titleService.setTitle('Register - GoalsApp')
+              private fb: FormBuilder,
+              private auth: AuthService,
+              private store$: Store) {
+    this.titleService.setTitle('Register - GoalsApp');
+  }
+
+  ngOnInit() {
   }
 
   registerHandler() {
-    //TODO: show notification instead alert!
+    //TODO: show notification instead alerts!
     if (this.regForm.invalid) {
       alert("Invalid Form Fields!");
       return;
     }
-    this.auth.register(this.regForm.value).subscribe({
-      next: value => {
-        console.log('Success: ',value)
-        alert(value)
-      },
-      error: (err) => {
-        console.log('err' + err)
-        alert('Error: ' + err.error.message)
-        console.log('Error: ',err.error.message)
-      }
-    });
-
+    const regForm = this.regForm.value;
+    this.store$.dispatch(UserPageActions.register({regForm}))
   }
 }
