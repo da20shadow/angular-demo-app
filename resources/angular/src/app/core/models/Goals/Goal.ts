@@ -1,4 +1,4 @@
-import {GoalCategories} from "../../../shared/constants/GoalCategories";
+import {GoalCategories} from "./GoalCategories";
 import {Task} from "../Tasks/Task";
 
 export interface Goal {
