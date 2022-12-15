@@ -1,3 +1,9 @@
-
+article {
+  cursor: pointer;
+  transition: ease-in-out 200ms;
+}
+article:hover {
+  transform: scale(1.02);
+}
 
 /*# sourceMappingURL=goals-list.component.css.map */
