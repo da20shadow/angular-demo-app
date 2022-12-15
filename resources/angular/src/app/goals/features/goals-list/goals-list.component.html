@@ -1,1 +1,32 @@
-<p>goals-list works!</p>
+<app-header-title title="My Goals"></app-header-title>
+
+<section class="my-8 p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+  <article class="relative container-light dark:container-dark" (click)="openGoalId(goalId.value)"
+            *ngFor="let goal of goals$ | async">
+    <input #goalId value="{{goal.id}}" type="hidden">
+
+<!--TODO: add dropdown menu with option to Rename & DELETE goal -->
+    <span class="absolute top-1 right-4">
+      <i class="fa-solid fa-ellipsis-vertical"></i>
+    </span>
+
+    <h1 class="text-2xl">{{goal.title}}</h1>
+
+    <hr>
+
+    <p class="p-5">{{goal.description}}</p>
+
+    <div class="flex justify-between p-5">
+
+      <span class="text-sm" >Start Date: {{goal.start_date | date}}</span>
+      <span class="text-sm" >Due Date: {{goal.due_date | date}}</span>
+
+    </div>
+
+  </article>
+
+
+
+
+</section>
