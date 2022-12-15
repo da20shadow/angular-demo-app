@@ -5,12 +5,14 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () =>
-      import('./features/goals-list/goals-list.module').then(m => m.GoalsListModule)
+      import('./features/goals-list/goals-list.module').then(m => m.GoalsListModule),
+    pathMatch: 'full',
   },
   {
     path: ':id',
     loadChildren: () =>
-      import('./features/goal-details/goal-details.module').then(m => m.GoalDetailsModule)
+      import('./features/goal-details/goal-details.module').then(m => m.GoalDetailsModule),
+    pathMatch: 'full'
   }
 ];
 
