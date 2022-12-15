@@ -118,10 +118,11 @@ class TaskController extends Controller
                 'error' => $exception->getMessage()
             ],400);
         }
-
+        $task = Task::where('user_id',$user_id)
+            ->where('title',$fields['title'])->first();
         return response()->json([
             'message' => 'Successfully added new task!',
-            'task' => $fields,
+            'task' => $task,
         ],201);
 
     }
@@ -168,10 +169,13 @@ class TaskController extends Controller
                 Task::where('user_id',$user_id)->where('id',$id)
                     ->update(['title' => $inputTitle['title']]);
             }catch (QueryException $exception){
-                return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
+                return response()->json([
+                    'message' => 'An Error Occur! Please, try again!',
+                    'error' => $exception->getMessage()
+                ],400);
                 //TODO: log the error!
             }
-            $message['message'] = 'Successfully updated task title!';
+            array_push($message,'Successfully updated task title!');
         }
 
         if (isset($fields['description'])){
@@ -181,20 +185,26 @@ class TaskController extends Controller
                 Task::where('user_id',$user_id)->where('id',$id)
                     ->update(['description' => $inputDesc['description']]);
             }catch (QueryException $exception ){
-                return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
+                return response()->json([
+                    'message' => 'An Error Occur! Please, try again!',
+                    'error' => $exception->getMessage()
+                ],400);
                 //TODO: log the error!
             }
             array_push($message,'Successfully updated task description!');
         }
 
         if (isset($fields['status'])){
-            $inputCategory = $request->validate(['status' => ['string']]);
+            $inputStatus = $request->validate(['status' => ['string']]);
 
             try {
                 Task::where('user_id',$user_id)->where('id',$id)
-                    ->update(['status' => $inputCategory['status']]);
+                    ->update(['status' => $inputStatus['status']]);
             }catch (QueryException $exception){
-                return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
+                return response()->json([
+                    'message' => 'An Error Occur! Please, try again!',
+                    'error' => $exception->getMessage()
+                ],400);
                 //TODO: log the error!
             }
             array_push($message,'Successfully updated task status!');
@@ -207,7 +217,10 @@ class TaskController extends Controller
                 Task::where('user_id',$user_id)->where('id',$id)
                     ->update(['end_date' => $inputDueDate['end_date']]);
             }catch (QueryException $exception){
-                return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
+                return response()->json([
+                    'message' => 'An Error Occur! Please, try again!',
+                    'error' => $exception->getMessage()
+                ],400);
                 //TODO: log the error!
             }
             array_push($message,'Successfully updated task End Date!');
@@ -220,7 +233,10 @@ class TaskController extends Controller
                 Task::where('user_id',$user_id)->where('id',$id)
                     ->update(['start_date' => $inputDueDate['start_date']]);
             }catch (QueryException $exception){
-                return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
+                return response()->json([
+                    'message' => 'An Error Occur! Please, try again!',
+                    'error' => $exception->getMessage()
+                ],400);
                 //TODO: log the error!
             }
             array_push($message,'Successfully updated task Start Date!');
@@ -233,13 +249,22 @@ class TaskController extends Controller
                 Task::where('user_id',$user_id)->where('id',$id)
                     ->update(['priority' => $inputDesc['priority']]);
             }catch (QueryException $exception){
-                return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
+                return response()->json([
+                    'message' => 'An Error Occur! Please, try again!',
+                    'error' => $exception->getMessage()
+                ],400);
                 //TODO: log the error!
             }
             array_push($message,'Successfully updated task priority!');
         }
 
-        return response()->json($message);
+        $task = Task::where('user_id',$user_id)
+            ->where('id',$id)->first();
+
+        return response()->json([
+            'message' => $message,
+            'task' => $task,
+        ],201);
     }
 
     /**
@@ -278,7 +303,7 @@ class TaskController extends Controller
                 ->first();
         }catch (QueryException $exception){
             $result['error'] = true;
-            $result['message'] = 'An Error Occur! Please, try again!';
+            $result['message'] = $exception->getMessage();
             return $result;
             //TODO: log the error!
         }
