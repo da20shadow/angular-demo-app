@@ -1,0 +1,85 @@
+<section [style]="'overflow-x:auto;'" class="overflow-x-auto">
+
+  <table matSort (matSortChange)="sortData($event)"
+    class="container-light dark:container-dark text-center dark:shadow-gray-500" *ngIf="tasksList">
+    <thead>
+
+    <tr class="bg-[#364962] dark:bg-[#364962]">
+      <th class="py-4 uppercase">Task Title</th>
+      <th class="py-4 uppercase">status</th>
+      <th mat-sort-header="priority" class="py-4 uppercase">priority</th>
+      <th mat-sort-header="startDate" class="py-4 uppercase">start date</th>
+      <th mat-sort-header="endDate" class="py-4 uppercase">end date</th>
+      <th class="py-4 uppercase">Action</th>
+    </tr>
+
+    </thead>
+
+    <tbody>
+
+    <tr class="border border-transparent dark:hover:border-gray-600 dark:hover:text-[#f0f8ff] dark:bg-[#252f3f] dark:hover:bg-gray-900 dark:odd:bg-gray-800"
+        *ngFor="let task of tasksList">
+
+      <td [routerLink]="['/tasks/',task.id]" class="py-3 dark:hover:bg-[#4b5563] cursor-pointer">
+        {{task.title}}
+      </td>
+      <!-- Task Status -->
+      <td #selectorStatus mat-button [matMenuTriggerFor]="statusMenu"
+        class="py-3 dark:hover:bg-[#4b5563] max-w-[50px] border-l dark:border-gray-600 cursor-pointer">
+        {{task.status}}
+        <mat-menu #statusMenu="matMenu" xPosition="after">
+          <button (click)="updateTaskId(task.id,'status',status);
+                selectorStatus.innerText = status"
+                  *ngFor="let status of taskStatuses" mat-menu-item>
+            {{status}}
+          </button>
+        </mat-menu>
+      </td>
+      <!-- Task Priority -->
+      <td #selectorPriority mat-button [matMenuTriggerFor]="priorityMenu"
+          class="py-3 dark:hover:bg-[#4b5563] max-w-[50px] border-l dark:border-gray-600 cursor-pointer">
+        {{task.priority}}
+        <mat-menu #priorityMenu="matMenu" xPosition="after">
+          <button (click)="updateTaskId(task.id,'priority',priority);
+                  selectorPriority.innerText = priority"
+                  *ngFor="let priority of taskPriority" mat-menu-item >
+            {{priority}}
+          </button>
+        </mat-menu>
+      </td>
+      <!-- Task Start Date -->
+      <td (click)="changeStartDate();"
+          class="py-3 dark:hover:bg-[#4b5563] max-w-[75px] border-l dark:border-gray-600 cursor-pointer text-sm">
+        {{task?.start_date | date: 'MMM d, y, H:mm'}}
+      </td>
+      <!-- Task End Date -->
+      <td (click)="changeEndDate()"
+          class="py-3 dark:hover:bg-[#4b5563] max-w-[75px] border-l dark:border-gray-600 cursor-pointer text-sm">
+        {{task?.end_date | date: 'MMM d, y, H:mm'}}
+      </td>
+      <!-- Task Action Buttons -->
+      <td class="py-3 max-w-[50px] border-l dark:border-gray-600">
+        <button class="text-gray-500 mr-2 cursor-pointer text-[#3174d3]"
+          (click)="editTask(task)"
+                mat-raised-button
+                matTooltip="Edit Task"
+                matTooltipPosition="above"
+                matTooltipHideDelay="150">
+        <i class="fas fa-edit"></i>
+        </button>
+        <button class="text-gray-500 cursor-pointer text-[#a05e5e]"
+                (click)="deleteTask(task)"
+                mat-raised-button
+                matTooltip="Delete Task"
+                matTooltipPosition="above"
+                matTooltipHideDelay="150">
+        <i class="fas fa-trash-alt"></i>
+        </button>
+      </td>
+
+    </tr>
+
+    </tbody>
+
+  </table>
+</section>
