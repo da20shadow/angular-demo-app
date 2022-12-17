@@ -6,7 +6,7 @@ import {RouterModule} from "@angular/router";
 import { PublicNavigationComponent } from './components/header/components/public-navigation/public-navigation.component';
 import { PrivateNavigationComponent } from './components/header/components/private-navigation/private-navigation.component';
 import { NavLinksComponent } from './components/header/components/nav-links/nav-links.component';
-
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -18,6 +18,7 @@ import { NavLinksComponent } from './components/header/components/nav-links/nav-
   ],
   imports: [
     CommonModule,
+    MatSnackBarModule,
     RouterModule,
   ],
   exports: [HeaderComponent,FooterComponent]

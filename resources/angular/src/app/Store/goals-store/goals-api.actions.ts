@@ -1,5 +1,5 @@
 import {createAction, props} from "@ngrx/store";
-import { Goal, GoalApiResponse,TaskApiResponse} from "../../core/models";
+import {Goal, GoalApiResponse, Task, TaskApiResponse} from "../../core/models";
 
 const loadSuccess = createAction('[GOALS API] Load Goals Success', props<{ goals: Goal[] }>());
 const loadFailure = createAction('[GOALS API] Load Goals Failure', props<{ error: GoalApiResponse }>());
@@ -16,8 +16,11 @@ const deleteFailure = createAction('[GOALS API] Delete Goal Failure', props<{ er
 const getGoalByIdSuccess = createAction('[GOALS API] Get Goal Success', props<{ response: GoalApiResponse }>());
 const getGoalByIdFailure = createAction('[GOALS API] Get Goal Failure', props<{ error: GoalApiResponse }>());
 
-const updateTaskSuccess = createAction('[GOAL API] Update Task Success',props<{response: TaskApiResponse}>());
-const updateTaskFailure = createAction('[GOAL API] Update Task Failure',props<{error: TaskApiResponse}>());
+const addTaskToGoalSuccess = createAction('[GOAL API] Add Task Success',props<{response: TaskApiResponse}>());
+const addTaskToGoalFailure = createAction('[GOAL API] Add Task Failure',props<{error: TaskApiResponse}>());
+
+const updateGoalTaskSuccess = createAction('[GOAL API] Update Task Success',props<{previousTaskStatus:any,response: TaskApiResponse}>());
+const updateGoalTaskFailure = createAction('[GOAL API] Update Task Failure',props<{error: TaskApiResponse}>());
 
 export const GoalApiActions = {
   loadSuccess,
@@ -30,6 +33,8 @@ export const GoalApiActions = {
   updateFailure,
   deleteSuccess,
   deleteFailure,
-  updateTaskSuccess,
-  updateTaskFailure
+  addTaskToGoalSuccess,
+  addTaskToGoalFailure,
+  updateGoalTaskSuccess,
+  updateGoalTaskFailure
 }

@@ -10,4 +10,11 @@ export class HeaderTitleComponent {
   @Input() title: string = '';
   classes = GlobalClasses;
 
+  onDoubleClick() {
+    alert('Double Clicked! You need to edit it!')
+  }
+
+  onClick() {
+    alert('Clicked!')
+  }
 }

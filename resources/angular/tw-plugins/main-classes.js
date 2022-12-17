@@ -17,8 +17,10 @@ module.exports = function ({addComponents,addBase, config}) {
     },
     '.card-dark': {
       backgroundColor: '#344050'
-    }
-
+    },
+    '.input-dark': {
+      backgroundColor: '#344050'
+    },
   }
 
   addComponents(mainClasses)

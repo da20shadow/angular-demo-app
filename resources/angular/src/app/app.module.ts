@@ -21,6 +21,7 @@ import {GoalService} from "./goals/services/goal.service";
 import {UserApiEffects} from "./Store/user-store/user-api.effects";
 import {routerReducer, StoreRouterConnectingModule} from "@ngrx/router-store";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {TasksApiEffects} from "./Store/tasks-store/tasks-api.effects";
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     }),
     EffectsModule.forRoot([
       GoalsApiEffects,
+      TasksApiEffects,
       UserApiEffects,
     ]),
     StoreRouterConnectingModule.forRoot(),

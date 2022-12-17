@@ -6,11 +6,13 @@ import {UserPageActions} from "./user-page.actions";
 import {catchError, from, map, of, switchMap} from "rxjs";
 import {UserApiActions} from "./user-api.actions";
 import {Router} from "@angular/router";
+import {NotificationService} from "../../core/services/notification.service";
 
 @Injectable()
 export class UserApiEffects {
   constructor(private userService: AuthService,
               private router: Router,
+              private notificationService: NotificationService,
               private store$: Store,
               private actions$: Actions) {
   }
@@ -52,10 +54,14 @@ export class UserApiEffects {
     switchMap((action) =>
       from(this.userService.login(action.email,action.password)).pipe(
         map((response) => {
+          this.notificationService.showSuccessNotification('Successfully Logged In!')
           this.router.navigate(['dashboard']);
           return UserApiActions.loginSuccess({response})
         }),
-        catchError((error) => of(UserApiActions.loginFailure({error})))
+        catchError((error) => {
+          this.notificationService.showErrorNotification(error.error.message);
+          return of(UserApiActions.loginFailure({error}))
+        })
       ))
   ));
 
@@ -76,10 +82,14 @@ export class UserApiEffects {
     switchMap((action) =>
       from(this.userService.register(action.regForm)).pipe(
         map((response) => {
+          this.notificationService.showSuccessNotification('Successfully Registered!')
           this.router.navigate(['dashboard'])
           return UserApiActions.registerSuccess({response})
         }),
-        catchError((error) => of(UserApiActions.registerFailure({error})))
+        catchError((error) => {
+          this.notificationService.showErrorNotification(error.error.message);
+          return of(UserApiActions.registerFailure({error}))
+        })
       ))
   ));
 

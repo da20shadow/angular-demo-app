@@ -1,0 +1,147 @@
+<!--Task Info-->
+<section class="p-5" *ngIf="(task$ |async) as task">
+
+  <article class="relative mb-10 container-light dark:container-dark">
+
+    <!-- Edit Task Icon -->
+    <div class="absolute top-3 right-3">
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Goal menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button (click)="editTask=true" mat-menu-item>
+          <mat-icon>edit</mat-icon>
+          <span>Edit</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>delete</mat-icon>
+          <span>Delete</span>
+        </button>
+      </mat-menu>
+
+    </div>
+
+    <!--Edit task form -->
+    <ng-container *ngIf="editTask">
+
+      <form (ngSubmit)="editTaskFormHandler(editTaskForm)"
+            #editTaskForm="ngForm"
+            class="bg-white dark:bg-gray-800 mt-8 space-y-6 shadow p-10 rounded-lg
+            shadow-2xl dark:shadow dark:shadow-gray-500">
+        <input type="hidden" [ngModel]="task.id" name="id" ngModel />
+        <input type="hidden" [ngModel]="task.status" name="previousTaskStatus" ngModel />
+        <!-- Goal Title Input Container-->
+        <div>
+          <div class="flex align-center border border-slate-600 rounded" >
+            <input class="w-full py-2 px-3 dark:bg-gray-800 dark:focus:bg-gray-900 dark:active:bg-gray-700"
+                   type="text"
+                   name="title"
+                   #title="ngModel"
+                   placeholder="Title..."
+                   minlength="15"
+                   required
+                   [ngModel]="task.title"
+            />
+          </div>
+          <!-- Error messages -->
+          <ng-container *ngIf="title.touched">
+            <span *ngIf="title.errors?.['required']"
+                  class="text-sm text-red-600">
+              Please enter Title!
+            </span>
+            <span *ngIf="title.errors?.['minlength']"
+                  class="text-sm text-red-600">
+              The goal title must be at least 15 characters long!
+            </span>
+          </ng-container>
+
+        </div>
+        <!-- Goal Description Input Container-->
+        <div>
+          <div class="flex align-center border border-slate-600 rounded" >
+            <textarea class="w-full min-h-[175px] py-2 px-3 dark:bg-gray-800 dark:focus:bg-gray-900 dark:active:bg-gray-700"
+                      name="description"
+                      #description="ngModel"
+                      placeholder="Goal Description..."
+                      required
+                      [ngModel]="task.description"></textarea>
+          </div>
+          <!-- Error messages -->
+          <ng-container *ngIf="title.touched">
+            <span *ngIf="description.errors?.['required']"
+                  class="text-sm text-red-600">
+              Description can not be empty!
+            </span>
+          </ng-container>
+        </div>
+        <!-- Save Button -->
+        <div>
+
+          <button class="relative btn-primary dark:btn-primary-dark" type="submit">
+            Save Changes
+          </button>
+
+        </div>
+
+      </form>
+    </ng-container>
+
+    <ng-container *ngIf="!editTask">
+
+      <div class="p-5 border-b">
+        <h1 class="text-2xl">{{task.title}}</h1>
+      </div>
+
+      <p class="p-5">{{task.description}}</p>
+
+    </ng-container>
+
+    <div class="flex justify-between p-5">
+
+      <span class="text-sm">Start Date: {{task.start_date | date}}</span>
+      <span class="text-sm">Due Date: {{task.end_date | date}}</span>
+
+    </div>
+
+  </article>
+
+  <!-- Open Add New Task Modal Button Start -->
+  <div class="flex justify-end items-center">
+    <button (click)="openAddNewTaskModal(task.id)" class="flex items-center relative btn-primary dark:btn-primary-dark">
+      <mat-icon>add</mat-icon>
+      Add Task
+    </button>
+  </div>
+  <!-- Open Add New Task Modal Button End -->
+
+  <!--Goal Tasks List Status In Progress START -->
+  <div class="my-5 relative min-h-[75px]">
+    <span class="center z-[1] py-2 px-3 bg-gray-700 border border-rose-300 rounded">
+      STATUS IN PROGRESS: {{task.in_progress_tasks.length}}
+    </span>
+    <hr class="center bg-rose-300 w-[90%]">
+  </div>
+  <app-tasks-list [tasksList]="task.in_progress_tasks"></app-tasks-list>
+  <!--Goal Tasks List Status In Progress END -->
+
+  <!--Goal Tasks List Status In Revision START -->
+  <div class="my-5 relative min-h-[75px]">
+    <span class="center z-[1] py-2 px-3 bg-gray-700 border border-rose-300 rounded">
+      STATUS IN REVISION: {{task.in_revision_tasks.length}}
+    </span>
+    <hr class="center bg-rose-300 w-[90%]">
+  </div>
+  <app-tasks-list [tasksList]="task.in_revision_tasks"></app-tasks-list>
+  <!--Goal Tasks List Status In Progress END -->
+
+  <!--Goal Tasks List status TO DO START-->
+  <div class="my-5 relative min-h-[75px]">
+    <span class="center z-[1] py-2 px-3 bg-gray-700 border border-rose-300 rounded">
+      STATUS TO DO: {{task.todo_tasks.length}}
+    </span>
+    <hr class="center bg-rose-300 w-[90%]">
+  </div>
+  <app-tasks-list [tasksList]="task.todo_tasks"></app-tasks-list>
+  <!--Goal Tasks List status TO DO END-->
+
+</section>

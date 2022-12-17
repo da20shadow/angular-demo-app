@@ -1,41 +1,10 @@
-
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
-@use '@angular/material' as mat;
-// Plus imports for other components in your app.
-
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
-@include mat.core();
-
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$angular-primary: mat.define-palette(mat.$indigo-palette);
-$angular-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
-$angular-warn: mat.define-palette(mat.$red-palette);
-
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$angular-theme: mat.define-light-theme((
-  color: (
-    primary: $angular-primary,
-    accent: $angular-accent,
-    warn: $angular-warn,
-  )
-));
-
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.all-component-themes($angular-theme);
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 //Scrollbar style
 /* width */
@@ -43,16 +12,19 @@ $angular-theme: mat.define-light-theme((
   width: 9px;
   height: 9px;
 }
+
 /* Track */
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 5px;
 }
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background-color: rgba(116, 129, 148, 0.9);
   border-radius: 5px;
 }
+
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
@@ -60,10 +32,12 @@ $angular-theme: mat.define-light-theme((
 
 button:disabled {
   cursor: not-allowed;
-  &:hover{
+
+  &:hover {
     transform: none;
   }
-  &:active{
+
+  &:active {
     transform: none;
   }
 }
@@ -71,9 +45,43 @@ button:disabled {
 .ok-input {
   box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.49);
 }
+
 .error-input {
   box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.49);
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+//Drop down mat-menu style starts here
+.example-mat-menu {
+  background-color: #425165 !important;
+  min-width: fit-content !important;
+  padding: 8px !important;
+  div{
+    padding: 0 !important;
+  }
+  button {
+    border-radius: 0.375rem !important;
+    border: 1px solid transparent;
+    margin: 5px 0 !important;
+    &:hover {
+      border: 1px solid #181818 !important;
+    }
+    span {
+      color: aliceblue;
+    }
+  }
+}
+
+.modal {
+  border: none;
+}
+
+//Center anu element!
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+

@@ -8,6 +8,8 @@ import {Goal} from "../../../core/models";
 import {goalsSelectors} from "../../../Store/app.state";
 import {GoalPageActions} from "../../../Store/goals-store/goals-page.actions";
 import {NgForm} from "@angular/forms";
+import {MatDialog} from "@angular/material/dialog";
+import {AddTaskModalComponent} from "../../../shared/components/add-task-modal/add-task-modal.component";
 
 @Component({
   selector: 'app-goals-list',
@@ -21,6 +23,7 @@ export class GoalsListComponent implements OnInit{
 
   constructor(private title: Title,
               private router: Router,
+              private dialog: MatDialog,
               private store$: Store) {
     this.title.setTitle('My Goals');
     this.goals$ = this.store$.select(goalsSelectors.goals);
@@ -28,8 +31,6 @@ export class GoalsListComponent implements OnInit{
 
   ngOnInit() {
     this.getGoals();
-    //TODO: Delete this log
-    console.log('goals-list.component.ts ngOnInit goals$', this.goals$)
   }
 
   getGoals(){
@@ -38,8 +39,6 @@ export class GoalsListComponent implements OnInit{
 
   openGoalId(goalId: string) {
     const id = parseInt(goalId);
-    //TODO: remove log
-    console.log('Open Goal id', id)
     this.store$.dispatch(GoalPageActions.selectGoal({goalId:id}));
     this.router.navigate([`goals/${id}`])
   }
@@ -55,4 +54,12 @@ export class GoalsListComponent implements OnInit{
     this.store$.dispatch(GoalPageActions.deleteGoal({goalId}));
   }
 
+  openAddGoalModal() {
+    this.dialog.open(AddTaskModalComponent,{
+      panelClass: 'modal',
+      minWidth: 340,
+      width: '75%',
+      data: {parentInfo: {noParent: true}}
+    })
+  }
 }

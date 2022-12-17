@@ -24,7 +24,8 @@ const routes: Routes = [
     loadChildren: () =>
       import('./user/user.module').then(m => m.UserModule),
     canActivate: [isLoggedInGuardFn],
-    canLoad: [isLoggedInGuardFn]
+    canLoad: [isLoggedInGuardFn],
+    data: { preload: true }
   },
   {
     path: 'goals',
@@ -32,6 +33,15 @@ const routes: Routes = [
       import('./goals/goals.module').then(m => m.GoalsModule),
     canActivate: [isLoggedInGuardFn],
     canLoad: [isLoggedInGuardFn],
+    data: { preload: true }
+  },
+  {
+    path: 'tasks',
+    loadChildren: () =>
+      import('./tasks/tasks.module').then(m => m.TasksModule),
+    canActivate: [isLoggedInGuardFn],
+    canLoad: [isLoggedInGuardFn],
+    data: { preload: true }
   },
   {path: '**', component: NotFoundComponent},
 ];

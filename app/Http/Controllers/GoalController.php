@@ -21,9 +21,7 @@ class GoalController extends Controller
         $user_id = auth()->user()->getAuthIdentifier();
 
         try {
-            $goalsList = DB::table('goals')
-                ->select('*')
-                ->where(['user_id' => $user_id])
+            $goalsList = Goal::where(['user_id' => $user_id])
                 ->where(['completed' => false])
                 ->get();
         }catch (QueryException $exception){
@@ -34,9 +32,13 @@ class GoalController extends Controller
         if (count($goalsList) < 1){
             return response()->json(['message' => 'No Goals Yet!'],400);
         }
-        foreach ((array)$goalsList as $goal){
-            $goal['tasks'] = [];
+
+        foreach ($goalsList as $goal){
+            $goal['todo_tasks'] = [];
+            $goal['in_progress_tasks'] = [];
+            $goal['in_revision_tasks'] = [];
         }
+
         return response()->json($goalsList);
     }
 
@@ -87,6 +89,10 @@ class GoalController extends Controller
         $addedGoal = Goal::where('user_id',$user_id)
             ->where('title',$fields['title'])->first();
 
+        $addedGoal['todo_tasks'] = [];
+        $addedGoal['in_progress_tasks'] = [];
+        $addedGoal['in_revision_tasks'] = [];
+
         return response()->json([
             "message" => "Successfully added new goal!",
             "goal" => $addedGoal
@@ -111,16 +117,45 @@ class GoalController extends Controller
         $goal = (array)$result['goal'];
 
         try {
-            $goalTasks = DB::table('tasks')
+            $todo_tasks = DB::table('tasks')
                 ->where(['goal_id' => $id])
                 ->where(['user_id' => $user_id])
+                ->where(['status' => 'To Do'])
+                ->orderBy('priority','desc')
+                ->orderBy('end_date')
+                ->orderBy('status','desc')
                 ->get();
+
+            $in_progress_tasks = DB::table('tasks')
+                ->where(['goal_id' => $id])
+                ->where(['user_id' => $user_id])
+                ->where(['status' => 'In Progress'])
+                ->orderBy('priority','desc')
+                ->orderBy('end_date')
+                ->orderBy('status','desc')
+                ->get();;
+
+            $in_revision_tasks = DB::table('tasks')
+                ->where(['goal_id' => $id])
+                ->where(['user_id' => $user_id])
+                ->where(['status' => 'In Revision'])
+                ->orderBy('priority','desc')
+                ->orderBy('end_date')
+                ->orderBy('status','desc')
+                ->get();;
+
         }catch (QueryException $exception){
-            return response()->json(['message' => 'An Error Occur! Please, try again!'],400);
+            return response()->json([
+                'message' => 'An Error Occur! Please, try again!',
+                'error' => $exception->getMessage()
+            ],400);
             //TODO: log the error!
         }
 
-        $goal['tasks'] = $goalTasks;
+        $goal['todo_tasks'] = $todo_tasks;
+        $goal['in_progress_tasks'] = $in_progress_tasks;
+        $goal['in_revision_tasks'] = $in_revision_tasks;
+
         return response()->json([
             'message' => 'Success!',
             'goal' => $goal
@@ -157,7 +192,7 @@ class GoalController extends Controller
         }
 
         if (isset($fields['description'])){
-            $inputDesc = $request->validate(['description' => ['string','min:10']]);
+            $inputDesc = $request->validate(['description' => ['string']]);
 
             try {
                 Goal::where('user_id',$user_id)->where('id',$id)
@@ -205,6 +240,10 @@ class GoalController extends Controller
         $updatedGoal = Goal::where('user_id',$user_id)
             ->where('id',$id)->first();
 
+        $updatedGoal['todo_tasks'] = [];
+        $updatedGoal['in_progress_tasks'] = [];
+        $updatedGoal['in_revision_tasks'] = [];
+
         return response()->json([
             "message" => "Successfully updated goal!",
             "goal" => $updatedGoal
@@ -240,7 +279,7 @@ class GoalController extends Controller
                 'message' => 'Error! Such goal not exist!'
             ],400);
         }
-        return response()->json(['goalId' => $id, 'message' => 'Successfully deleted goal!']);
+        return response()->json(['goal_id' => $id, 'message' => 'Successfully deleted goal!']);
     }
 
     private static function chekIfExist(mixed $user_id, int $goal_id): array

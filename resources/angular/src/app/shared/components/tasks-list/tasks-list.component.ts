@@ -1,21 +1,30 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Task, Status, Priority} from "../../../../core/models";
-import {Sort} from "@angular/material/sort";
+import {Component, Input} from '@angular/core';
+import {Priority, Status, Task} from "../../../core/models";
 import {MatDialog} from "@angular/material/dialog";
-import {EditTaskModalComponent} from "../../../../shared/components/edit-task-modal/edit-task-modal.component";
+import {EditTaskModalComponent} from "../edit-task-modal/edit-task-modal.component";
 import {tap} from "rxjs";
+import {Sort} from "@angular/material/sort";
+import {Store} from "@ngrx/store";
+import {TaskPageActions} from "../../../Store/tasks-store/tasks-page.actions";
+import {animate, state, style, transition, trigger} from "@angular/animations";
 
 @Component({
-  selector: 'app-goal-tasks',
-  templateUrl: './goal-tasks.component.html',
-  styleUrls: ['./goal-tasks.component.scss']
+  selector: 'app-tasks-list',
+  templateUrl: './tasks-list.component.html',
+  styleUrls: ['./tasks-list.component.scss'],
+  animations: [
+    trigger('fadeInOut', [
+      state('void', style({
+        opacity: 0,
+      })),
+      transition('void <=> *', animate(300)),
+    ]),
+  ]
 })
-export class GoalTasksComponent {
+export class TasksListComponent {
 
   @Input()
   tasksList: Task[] = [];
-  @Output()
-  updateTaskById: EventEmitter<any> = new EventEmitter();
 
   taskStatuses = Object.values(Status);
   taskPriority = Object.values(Priority);
@@ -23,32 +32,21 @@ export class GoalTasksComponent {
   showStartDateInput: boolean = false;
   showEndDateInput: boolean = false;
 
-  constructor(private dialog: MatDialog) {
-  }
-
-  updateTaskId(taskId: number | undefined, type: string,
-               field: string) {
-    if (taskId == undefined) {
-      return;
-    }
-    const data = {taskId, task: {[type]: field}};
-    this.updateTaskById.emit(data);
-  }
-
-  changePriority() {
-    alert('change priority!')
+  constructor(private dialog: MatDialog, private store$: Store) {
   }
 
   changeStartDate() {
     this.showStartDateInput = true;
     alert('change start date')
+    //TODO:
   }
 
   changeEndDate() {
     alert('change end date')
+    //TODO:
   }
 
-  editTask(task: Task) {
+  openEditTaskModal(task: Task) {
 
     this.dialog.open(EditTaskModalComponent,{
       panelClass: 'modal',
@@ -63,13 +61,26 @@ export class GoalTasksComponent {
         return data;
       })
     )
-    // this.dialog.afterAllClosed.subscribe(data => {
-    //   console.log('Edited Task: ',data)
-    // })
   }
 
-  deleteTask(task: Task) {
-    alert('delete task')
+  openDeleteTaskModal(task: Task|undefined|null) {
+    if (!task){ return; }
+    //TODO: implement this delete task modal and process if write DELETE in the input!
+    confirm('Are you sure that you want to delete this task?')
+
+    this.store$.dispatch(TaskPageActions.deleteSubtask({task}));
+  }
+
+  updateTaskId(taskId: number | null | undefined,
+               status: string | Status | null | undefined,
+               type: string, field:string) {
+    if (!taskId || !type || !field || !status){
+      alert('Invalid Task Update Request!');
+      return;
+    }
+    const previousTaskStatus = status
+    const changedTask = {id:taskId, [type]: field }
+    this.store$.dispatch(TaskPageActions.updateSubtask({taskId,previousTaskStatus,changedTask}));
   }
 
   sortData(sort: Sort) {
@@ -96,10 +107,9 @@ export class GoalTasksComponent {
 
 }
 
-function compare(a: number | Priority | string | undefined, b: number | Priority | string | undefined, isAsc: boolean) {
-  if (a === undefined || b === undefined) {
-    return 0
-  }
+function compare(a: number | Priority | string | undefined|null,
+                 b: number | Priority | string | undefined|null, isAsc: boolean) {
+  if (!a || !b) { return 0 }
   let isPriority = false;
   switch (a) {
     case Priority.URGENT: a = 1; isPriority = true; break;

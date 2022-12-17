@@ -1,10 +1,12 @@
-<form mat-dialog-content
+<form mat-dialog-content [@openClose]="isOpen ? 'open' : 'closed'"
       (ngSubmit)="editTaskFormHandler(editTaskForm)"
       #editTaskForm="ngForm"
       class="bg-white dark:bg-gray-800 mt-8 space-y-6 shadow p-10 rounded-sm
             shadow-2xl dark:shadow dark:shadow-gray-500">
 
-  <button class="dark:text-gray-500 hover:dark:text-gray-400 absolute top-3 right-3" mat-dialog-close mat-icon-button>
+  <button (click)="toggle()"
+          class="dark:text-gray-500 hover:dark:text-gray-400 absolute top-3 right-3"
+          mat-dialog-close mat-icon-button>
     <mat-icon>close</mat-icon>
   </button>
 
@@ -40,10 +42,17 @@
             <textarea [ngClass]="classes.input"
                       class="w-full min-h-[175px] py-2 px-3 "
                       name="description"
-                      placeholder="Goal Description..."
-                      required
+                      #description="ngModel"
+                      placeholder="Task Description..."
                       [ngModel]="task.description"></textarea>
     </div>
+    <!-- Error messages -->
+    <ng-container *ngIf="title.touched">
+            <span *ngIf="description.errors?.['required']"
+                  class="text-sm text-red-600">
+              Task Description can not be empty!
+            </span>
+    </ng-container>
 
   </div>
   <!-- Save Button -->

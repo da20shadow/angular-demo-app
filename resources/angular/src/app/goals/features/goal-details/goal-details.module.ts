@@ -8,22 +8,18 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 import {FormsModule} from "@angular/forms";
 import {MatTooltipModule} from '@angular/material/tooltip';
-import {GoalTasksComponent} from "./goal-tasks/goal-tasks.component";
-import {MatSortModule} from '@angular/material/sort';
 import {MatDialogModule} from '@angular/material/dialog';
 
 
 @NgModule({
   declarations: [
     GoalDetailsComponent,
-    GoalTasksComponent
   ],
   imports: [
     CommonModule,
     MatMenuModule,
     MatIconModule,
     MatTooltipModule,
-    MatSortModule,
     MatDialogModule,
     FormsModule,
     GoalDetailsRoutingModule,

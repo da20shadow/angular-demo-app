@@ -93,9 +93,22 @@ class TaskController extends Controller
             }
         }
 
-        //Check if task title exist
+        //Check if set and if exist
+        $isTheParentAGoal = isset($fields['goal_id']);
+        $isTheParentATask = isset($fields['task_id']);
+
+        if (!$isTheParentAGoal && !$isTheParentATask) {
+            return response()->json(['message' => 'There is no parent for this task!'],400);
+        }
+
+        //Check if task title exist already in this goal
         try {
+
+            $parent = $isTheParentAGoal ? $fields['goal_id'] : $fields['task_id'];
+            $column = $isTheParentAGoal ? 'goal_id' : 'task_id';
+
             $taskTitleExist = Task::where('user_id',$user_id)
+                ->where($column,$parent)
                 ->where('title',$fields['title'])->first();
         }catch (QueryException $exception){
             return response()->json([
@@ -141,7 +154,51 @@ class TaskController extends Controller
             return response()->json(['message' => $result['message']], 400);
         }
 
-        return response()->json($result['task']);
+        $task = (array)$result['task'];
+
+        try {
+            $todo_tasks = DB::table('tasks')
+                ->where(['task_id' => $id])
+                ->where(['user_id' => $user_id])
+                ->where(['status' => 'To Do'])
+                ->orderBy('priority','desc')
+                ->orderBy('end_date')
+                ->orderBy('status','desc')
+                ->get();
+
+            $in_progress_tasks = DB::table('tasks')
+                ->where(['task_id' => $id])
+                ->where(['user_id' => $user_id])
+                ->where(['status' => 'In Progress'])
+                ->orderBy('priority','desc')
+                ->orderBy('end_date')
+                ->orderBy('status','desc')
+                ->get();;
+
+            $in_revision_tasks = DB::table('tasks')
+                ->where(['task_id' => $id])
+                ->where(['user_id' => $user_id])
+                ->where(['status' => 'In Revision'])
+                ->orderBy('priority','desc')
+                ->orderBy('end_date')
+                ->orderBy('status','desc')
+                ->get();;
+
+        }catch (QueryException $exception){
+            return response()->json([
+                'message' => 'An Error Occur! Please, try again!',
+                'error' => $exception->getMessage()
+            ],400);
+            //TODO: log the error!
+        }
+
+        $task['todo_tasks'] = $todo_tasks;
+        $task['in_progress_tasks'] = $in_progress_tasks;
+        $task['in_revision_tasks'] = $in_revision_tasks;
+
+        return response()->json([
+            'task' => $task,
+        ]);
     }
 
     /**
@@ -179,7 +236,7 @@ class TaskController extends Controller
         }
 
         if (isset($fields['description'])){
-            $inputDesc = $request->validate(['description' => ['string','min:10']]);
+            $inputDesc = $request->validate(['description' => ['string']]);
 
             try {
                 Task::where('user_id',$user_id)->where('id',$id)
@@ -291,7 +348,10 @@ class TaskController extends Controller
                 'message' => 'Error! Such task not exist!'
             ],400);
         }
-        return response()->json(['message' => 'Successfully deleted task!']);
+        return response()->json([
+            'message' => 'Successfully deleted task!',
+            'task_id' => $id
+        ]);
     }
 
     private static function chekIfExist(mixed $user_id, int $task_id): array

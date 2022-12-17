@@ -12,5 +12,7 @@ export interface Goal {
   created_at: string|undefined|null;
   updated_at: string|undefined|null;
   category: GoalCategories|undefined|null;
-  tasks: Task[];
+  todo_tasks: Task[];
+  in_progress_tasks: Task[];
+  in_revision_tasks: Task[];
 }

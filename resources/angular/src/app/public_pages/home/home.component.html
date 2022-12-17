@@ -1,1 +1,50 @@
-<p>home works!</p>
+<app-header-title title="Home"></app-header-title>
+
+
+<div class="w-4/5 my-8 mx-auto" [ngClass]="classes.box">
+
+  <div class="flex gap-3">
+
+    <button class="btn-primary dark:btn-primary-dark">btn-primary</button>
+    <button disabled class="btn-primary-disabled dark:btn-primary-disabled-dark">btn-primary-disabled</button>
+
+    <button class="btn-secondary dark:btn-secondary-dark" >btn-secondary</button>
+    <button disabled class="btn-secondary-disabled dark:btn-secondary-disabled-dark" >Secondary Disabled</button>
+
+  </div>
+
+  <hr class="my-4">
+
+  <div class="flex gap-3">
+
+    <button class="text-md" [ngClass]="classes.btnPrimarySm">Primary</button>
+    <button class="text-md" [ngClass]="classes.btnWarning">Warning</button>
+    <button class="text-md" [ngClass]="classes.btnError">Error</button>
+
+  </div>
+
+  <hr class="my-4">
+
+  <div class="flex gap-3">
+
+    <button class="text-lg" [ngClass]="classes.btnPrimarySm">Primary</button>
+    <button class="text-lg" [ngClass]="classes.btnWarning">Warning</button>
+    <button class="text-lg" [ngClass]="classes.btnError">Error</button>
+
+  </div>
+
+  <hr class="my-4">
+
+  <div class="flex gap-3">
+    <button class="text-xl" [ngClass]="classes.btnPrimarySm">Primary</button>
+    <button class="text-xl" [ngClass]="classes.btnWarning">Warning</button>
+    <button class="text-xl" [ngClass]="classes.btnError">Error</button>
+  </div>
+
+  <hr class="my-4">
+
+
+  <hr class="my-4">
+
+</div>
+

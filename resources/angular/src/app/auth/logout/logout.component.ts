@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {AuthService} from "../services/auth.service";
-import {Router} from "@angular/router";
+import {Store} from "@ngrx/store";
+import {UserPageActions} from "../../Store/user-store/user-page.actions";
 
 @Component({
   selector: 'app-logout',
@@ -9,17 +9,8 @@ import {Router} from "@angular/router";
 })
 export class LogoutComponent {
 
-  constructor(private auth: AuthService,private route: Router) {
-    this.auth.logout().subscribe({
-      next: (data) => {
-        console.log(data)
-        this.route.navigate(['login']);
-      },
-      error: (err) => {
-        console.log(err)
-        alert('An Error occur please try again!')
-      }
-    });
+  constructor(private store$: Store) {
+    this.store$.dispatch(UserPageActions.logout());
   }
 
 }
